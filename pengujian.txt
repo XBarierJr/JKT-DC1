@@ -1,0 +1,18 @@
+PENGUJIAN
+
+setelah semua aplikasi di restart dan tidak ada yg error, lanjutkan ke pengujian client
+
+hubungkan virtual box dengan pc client
+	atur di adapter nya "obtain ip address"
+buka cmd
+	ketikkan ipconfig
+	jika di adapter virtual box muncul alamat ip yg sesuai konfigurasi dhcp tadi maka konfigurasi tersebut berhasil
+	jika tidak muncul ketikkan ipconfig /release
+	lalu ipconfig /renew
+	jika tidak muncul juga maka cek kembali konfigurasi dhcp
+
+setelah terhubung maka cek di web browser
+	www.xport.net
+	dan
+	ftp.xport.net
+==================================================================================================

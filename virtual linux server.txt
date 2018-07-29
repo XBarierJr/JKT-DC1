@@ -1,0 +1,93 @@
+VIRTUAL LINUX SERVER
+-----------------------------------
+
+KONFIGURASI HOSTNAME & PASSWORD
+HOSTNAME :
+	nano /etc/hostname (ubah sesuai keinginan)
+	nano /etc/hosts (samakan hostname)
+PASSWORD  : 
+	passwd
+	
+
+KONFIGURASI IP (10.10.10.1/24)
+	ifconfig eth0 10.10.10.1 netmask 255.255.255.0
+=======================================================================
+
+A. KONFIGURASI DNS
+	(nano named.conf.local)
+	zone "xport.net" {
+		type master;
+		file "/etc/bind/db.xport"
+	};
+
+	zone "10.10.10.in-addr.arpa" {
+		type master;	
+		file "/etc/bind/db.10"
+	};
+------------------------------------------------------------------------------
+	cp db.local db.xport
+	cp db.127 db.10
+------------------------------------------------------------------------------
+	(nano db.xport)
+	ubah localhost menjadi domain xport.net
+	tambahkan 
+		www	IN	A	10.10.10.1
+		ftp	IN	A	10.10.10.1
+------------------------------------------------------------------------------
+	(nano db.10)
+	ubah localhost menjadi domain xport.net
+------------------------------------------------------------------------------	
+	(nano /etc/resolv.conf)
+	search xport.net
+	name server 10.10.10.1
+------------------------------------------------------------------------------
+	restart bind9
+	service bind9 restart
+------------------------------------------------------------------------------
+
+B. KONFIGURASI DHCP
+	install
+	apt-get install dhcp3-server
+------------------------------------------------------------------------------
+	nano /etc/dhcp/dhcpd.conf
+	cari "a slightly different..................."
+	lalu pada kata subnet di bawahnya hapus tanda pagar nya sampai tanda }
+------------------------------------------------------------------------------
+	sesuaikan subnet,netmask,range dll
+------------------------------------------------------------------------------
+	nano /etc/default/isc-dhcp-server
+	scroll ke bagian paling bawah
+	ubah INTERFACES nya menjadi eth0	
+------------------------------------------------------------------------------
+	restart
+	service isc-dhcp-server restart
+------------------------------------------------------------------------------
+
+C. KONFIGURASI WEB SERVER
+	install apache
+	apt-get install apache2
+------------------------------------------------------------------------------
+	nano /etc/apache2/sites-available/default
+	ubah localhost menjadi domain xport.net
+	tambahkan dibagian bawah ServerAdmin
+		ServerName www.xport.net
+------------------------------------------------------------------------------
+	restart
+	service apache2 restart
+------------------------------------------------------------------------------
+
+D. KONFIGURASI FTP
+	install
+	apt-get install proftpd
+------------------------------------------------------------------------------
+	nano /etc/proftpd/proftpd.conf
+	ubah ServerName		"www.xport.net"
+	hapus pagar di <Anonymus >
+			user		ftp	
+			group		nogroup
+
+			</Anonymus>
+
+
+	
+	
